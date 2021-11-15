@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "773840236497",
+    "firebase_url": "https://memori-d925d-default-rtdb.firebaseio.com",
+    "project_id": "memori-d925d",
+    "storage_bucket": "memori-d925d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:773840236497:android:50941dadd787a820f1faf0",
+        "android_client_info": {
+          "package_name": "com.example.project"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "773840236497-baosq6neq3k85hn4seh0nll3s423u13p.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.project",
+            "certificate_hash": "286237cde066c021383887a506016d55a6b067b7"
+          }
+        },
+        {
+          "client_id": "773840236497-q3tpj1nlqgh0ekm7u4m8avdurhk7q2pn.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBwRPtoODPhWjZS09L5WM0EF0B4PCIuCt8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "773840236497-q3tpj1nlqgh0ekm7u4m8avdurhk7q2pn.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
