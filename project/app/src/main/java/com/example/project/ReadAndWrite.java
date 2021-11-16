@@ -38,6 +38,9 @@ public class ReadAndWrite {
 
 
     // 새롭게 단어를 받을 때 사용, 기본적으로 spelling을 리스트의 key로 삼아 저장
+    // 데이터의 생성과 수정의 역할을 동시에 수행한다.
+    // spelling을 키로 삼아 단어 쌍을 리스트에 저장한다.
+    // 동일한 spelling이 올 경우 기존의 spelling의 단어를 업데이트 하는 효과가 있다.
     public void writeNewWord(String listName, String mean, String spelling){
         userDatabase.child(listName).child(spelling).setValue(mean);
     }
@@ -56,6 +59,8 @@ public class ReadAndWrite {
         userDatabase.child(listName).child(spelling).removeValue();
     }
 
+    // 임시로 만든 리스트 데이터 쌍 수정 메소드... 스팰링을 키로 삼아 있으면 삭제하고 다시 생성한다.
+    // 일반적으로 위의 writeNewWord가 수정의 역할도 겸하고 있긴 하다.
     public void updateWord(String listName, String mean, String spelling){
         if(userDatabase.child(listName).child(spelling).getKey().equals(spelling)){
             deleteWord(listName, mean, spelling);
@@ -72,9 +77,11 @@ public class ReadAndWrite {
         ValueEventListener baseListener = new ValueEventListener() {
 
             // 내부의 변화가 있으면 호출 되는 함수
-            //
+            // userID를 루트로 갖는 DB참조 변수와 list의 이름을 루트로 갖는 DB참조 변수만 온다고 우선 생각한다.
+            // 여러 경우에 대해 테스트 후 보완이 필요한지 점검 필요
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                // userID를 루트로 삼는 DB참조변수를 인자로 받을 경우 userID 하위의 리스트 이름들을 nameList에 저장한다.
                 if(baseRef.equals(userDatabase)){
                     nameList.clear();
                     for(DataSnapshot userSnapshot : snapshot.getChildren())
@@ -97,6 +104,9 @@ public class ReadAndWrite {
         baseRef.addValueEventListener(baseListener);
     }
 
+    // 초기에 nameList에 대해 받아오기 위해 만든 함수다.
+    // 1회에 대해 데이터를 받아오는 역할을 한다... 지금은 mainActivity의 onStart()에서 호출되는 형태인데
+    // onStart()가 2번 수행됨에 따라 본 함수도 2회 호출 되고 있다.
     public void getFirstListListener(){
         userDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override

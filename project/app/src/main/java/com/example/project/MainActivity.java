@@ -19,6 +19,8 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
 
+    public static int check = 0;
+
     FirebaseUser user;
     String userID;
     String listName;
@@ -56,17 +58,24 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         spellingList = new ArrayList<>();
 
         startActivity(new Intent(this, LoginForm.class));
+    }
+
+
+    // 현재 LoginForm액티비티를 onCreate()에서 실행시킨다...
+    // 메인 엑티비티는 oncreate -> onStart -> resumed -> paused -> stopped 상태를 지나 restart가 호출되면서
+    // 다시 onStart()가 실행된다.
+    // onCreate()에서 userID를 받는 행위를 할 경우 정상적으로 받아지지 않을 가능성이 존재한다.
+    // 앞에서의 로그인 과정을 수행한 후 다시 onStart()가 호출 했을 때 userID를 받아 현재 유저를 갱신하는 일을 한다.
+    @Override
+    protected void onStart() {
+        super.onStart();
 
         user = FirebaseAuth.getInstance().getCurrentUser();
         userID = user.getUid();
         Log.d("user", "userID");
         DBHelper = new ReadAndWrite(userID, nameList, meanList, spellingList);
 
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
+        Log.d("onStart", "..." + ++check);
         //DBHelper = new ReadAndWrite(userID, nameList, meanList, spellingList);
         DBHelper.getFirstListListener();
 
