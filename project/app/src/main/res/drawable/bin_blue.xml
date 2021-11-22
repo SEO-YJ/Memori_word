@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--버튼:구글로그인 누를때, 평상시, 못누를떄-->
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_pressed="true">
+        <shape android:shape="rectangle">
+            <corners android:radius="100dp"/>
+            <solid android:color="@color/common_google_signin_btn_text_light_pressed"/>
+        </shape>
+    </item>
+    <item android:shape="rectangle">
+        <shape android:shape="rectangle">
+            <corners android:radius="100dp"/>
+            <solid android:color="#00d2ed"/>
+        </shape>
+
+        <item android:state_enabled="false">
+            <shape android:shape="rectangle">
+                <corners android:radius="100dp"/>
+                <solid android:color="@color/white"/>
+            </shape>
+        </item>
+
+    </item>
+</selector>

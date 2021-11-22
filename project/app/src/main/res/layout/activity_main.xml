@@ -4,6 +4,18 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+    <Button
+        android:id="@+id/quiz_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="퀴즈" />
+
+    <Button
+        android:id="@+id/sign_page"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="sign page" />
+
     <EditText
         android:id="@+id/mean_view"
         android:layout_width="wrap_content"

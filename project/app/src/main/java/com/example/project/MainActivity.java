@@ -1,5 +1,6 @@
 package com.example.project;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -12,6 +13,10 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -25,6 +30,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     String userID;
     String listName;
     ReadAndWrite DBHelper;
+
+    Button quizBtn;
 
     EditText meanView;
     EditText spellingView;
@@ -49,6 +56,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         deleteBtn = findViewById(R.id.delete_btn);
         listView = findViewById(R.id.list_view);
 
+        quizBtn = findViewById(R.id.quiz_btn);
+        quizBtn.setOnClickListener(this);
+
         saveBtn.setOnClickListener(this);
         loadBtn.setOnClickListener(this);
         deleteBtn.setOnClickListener(this);
@@ -57,7 +67,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         meanList = new ArrayList<>();
         spellingList = new ArrayList<>();
 
-        startActivity(new Intent(this, LoginForm.class));
     }
 
 
@@ -69,26 +78,29 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onStart() {
         super.onStart();
-
         user = FirebaseAuth.getInstance().getCurrentUser();
-        userID = user.getUid();
-        Log.d("user", "userID");
-        DBHelper = new ReadAndWrite(userID, nameList, meanList, spellingList);
+        if(user != null){
+            userID = user.getUid();
+            Log.d("user", "userID");
+            DBHelper = new ReadAndWrite(userID, nameList, meanList, spellingList);
 
-        Log.d("onStart", "..." + ++check);
-        //DBHelper = new ReadAndWrite(userID, nameList, meanList, spellingList);
-        DBHelper.getFirstListListener();
+            Log.d("onStart", "..." + ++check);
+            //DBHelper = new ReadAndWrite(userID, nameList, meanList, spellingList);
+            DBHelper.getFirstListListener();
 
-        if(nameList.size() != 0)
-        {
-            listName = nameList.get(0);
-            Log.d("list name : ", listName);
+//            if(nameList.size() != 0)
+//            {
+//                listName = nameList.get(0);
+//                Log.d("list name : ", listName);
+//            }
+//            else
+//                listName = "list name";
+
+            ArrayAdapter arrayAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, nameList);
+            listView.setAdapter(arrayAdapter);
         }
-        else
-            listName = "list name";
 
-        ArrayAdapter arrayAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, nameList);
-        listView.setAdapter(arrayAdapter);
+
     }
 
     @Override
@@ -111,8 +123,49 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 DBHelper.deleteWord(listName, mean, spelling);
             }
         }
+        else if(view == quizBtn){
+            Intent intent = new Intent(this, ListPage.class);
+            intent.putExtra("nameList", this.nameList);
+            intent.putExtra("meanList", this.meanList);
+            intent.putExtra("spellingList", this.spellingList);
+            intent.putExtra("UID", this.userID);
+            startActivity(intent);
+
+        }
+
 
         ArrayAdapter arrayAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, meanList);
         listView.setAdapter(arrayAdapter);
     }
+
+    // 계정 합치기...
+    public static void linkAndMerge(AuthCredential credential){
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+
+        FirebaseUser prevUser = FirebaseAuth.getInstance().getCurrentUser();
+        FirebaseAuth.getInstance().signOut();
+        mAuth.signInWithCredential(credential)
+                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        FirebaseUser currentUser = task.getResult().getUser();
+                        Log.d("current user", currentUser.getUid());
+                        Log.d("prev user", prevUser.getUid());
+
+                        ReadAndWrite prevDB = new ReadAndWrite(prevUser.getUid());
+                        ReadAndWrite currnetDB = new ReadAndWrite(currentUser.getUid());
+                        currnetDB.getFirstListListener();
+                        prevDB.getFirstListListener();
+
+                        Log.d("prev DB", "" + prevDB.nameList.size());
+                        Log.d("current DB", "" + currnetDB.nameList.size());
+
+                        currnetDB.mergeDatabase(prevDB);
+                        //prevUser.delete();
+                    }
+                });
+    }
+
+
+
 }

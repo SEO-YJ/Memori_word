@@ -1,5 +1,7 @@
 package com.example.project;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -10,15 +12,16 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ReadAndWrite {
+public class ReadAndWrite implements Serializable {
 
-    private DatabaseReference rootDatabase;
-    private DatabaseReference userDatabase;
-    private DatabaseReference listDatabase;
+    DatabaseReference rootDatabase;
+    DatabaseReference userDatabase;
+    //private DatabaseReference listDatabase;
     ArrayList<String> nameList;
     ArrayList<String> meanList;
     ArrayList<String> spellingList;
@@ -29,13 +32,54 @@ public class ReadAndWrite {
     public ReadAndWrite(String userID, ArrayList<String> nameList, ArrayList<String> meanList, ArrayList<String> spellingList){
         rootDatabase = FirebaseDatabase.getInstance().getReference();
         userDatabase = rootDatabase.child(userID);
+        //listDatabase = null;
         this.nameList = nameList;
         this.meanList = meanList;
         this.spellingList = spellingList;
 
+
         addWordEventListener(userDatabase);
     }
 
+    public ReadAndWrite(String userID){
+        rootDatabase = FirebaseDatabase.getInstance().getReference();
+        userDatabase = rootDatabase.child(userID);
+
+        this.nameList = new ArrayList<>();
+        this.meanList = new ArrayList<>();
+        this.spellingList = new ArrayList<>();
+
+        writeNewWord("new", "aaaa", "cccc");
+
+        getFirstListListener();
+
+        addWordEventListener(userDatabase);
+
+        Log.d("name list size", "" + nameList.size());
+
+
+    }
+
+    public void mergeDatabase(ReadAndWrite prev){
+        Log.d("두 계정 연동", "시작...");
+        prev.getFirstListListener();
+        getFirstListListener();
+
+        //Log.d("current", this.nameList.get(0));
+        //Log.d("prev", prev.nameList.get(0));
+
+        if(prev.nameList.size() != 0){
+            Log.d("" + prev.nameList.get(0), "" + this.nameList.get(0));
+
+            for(int i =0; i < prev.nameList.size(); i++){
+                for(int j=0; j < prev.spellingList.size(); j++){
+                    this.writeNewWord(prev.nameList.get(i), prev.meanList.get(j), prev.spellingList.get(j));
+                }
+            }
+        }
+
+
+    }
 
     // 새롭게 단어를 받을 때 사용, 기본적으로 spelling을 리스트의 key로 삼아 저장
     // 데이터의 생성과 수정의 역할을 동시에 수행한다.
@@ -43,12 +87,13 @@ public class ReadAndWrite {
     // 동일한 spelling이 올 경우 기존의 spelling의 단어를 업데이트 하는 효과가 있다.
     public void writeNewWord(String listName, String mean, String spelling){
         userDatabase.child(listName).child(spelling).setValue(mean);
+        addWordEventListener(userDatabase.child(listName));
     }
     // 리스트를 선택해 해당 리스트를 가리키는 DB참조를 받는 listDatabase를 설정할 때 사용
-    public void listSelcet(String listName){
-        listDatabase = userDatabase.child(listName);
-        addWordEventListener(listDatabase);
-    }
+//    public void listSelcet(String listName){
+//        listDatabase = userDatabase.child(listName);
+//        addWordEventListener(listDatabase);
+//    }
     // 리스트를 생성하는 함수... 리스트만 생성한다.
     public void writeNewList(String listName){
         userDatabase.child(listName).setValue("");
@@ -81,6 +126,7 @@ public class ReadAndWrite {
             // 여러 경우에 대해 테스트 후 보완이 필요한지 점검 필요
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                Log.d("ValueEventListener", "호출 됨");
                 // userID를 루트로 삼는 DB참조변수를 인자로 받을 경우 userID 하위의 리스트 이름들을 nameList에 저장한다.
                 if(baseRef.equals(userDatabase)){
                     nameList.clear();
@@ -88,11 +134,13 @@ public class ReadAndWrite {
                         nameList.add(userSnapshot.getKey());
                 }
                 else{
+                    Log.d("list...", "업데이트 됨");
                     meanList.clear();
                     spellingList.clear();
                     for(DataSnapshot listSnapshot : snapshot.getChildren()){
                         spellingList.add(listSnapshot.getKey());
                         meanList.add(listSnapshot.getValue().toString());
+                        Log.d("mean", listSnapshot.getValue().toString());
                     }
                 }
             }
@@ -112,15 +160,77 @@ public class ReadAndWrite {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 nameList.clear();
-                for(DataSnapshot listSnapshot : snapshot.getChildren())
+                Log.d("getFirstListListener", "호출 됨");
+                for(DataSnapshot listSnapshot : snapshot.getChildren()){
                     nameList.add(listSnapshot.getKey());
+                    Log.d("name list에 들어감",listSnapshot.getKey());
+                }
+
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-
+                Log.d("getFirstListListener", "호출 실패함.....");
             }
         });
     }
+
+    public void getFirstListListener(DatabaseReference ref, ArrayList<String> meanList, ArrayList<String> spellingList){
+        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                meanList.clear();
+                spellingList.clear();
+                Log.d("getFirstListListener..", "호출 됨");
+                for(DataSnapshot listSnapshot : snapshot.getChildren()){
+                    spellingList.add(listSnapshot.getKey());
+                    meanList.add(listSnapshot.getValue().toString());
+                    Log.d("mean", listSnapshot.getValue().toString());
+                }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.d("getFirstListListener", "호출 실패함.....");
+            }
+        });
+    }
+
+
+
+    public void setRootDatabase(DatabaseReference ref){
+        this.rootDatabase = ref;
+    }
+    public void setUserDatabase(DatabaseReference ref){
+        this.userDatabase = ref;
+    }
+    public DatabaseReference getRootDatabase(){
+        return rootDatabase;
+    }
+    public DatabaseReference getUserDatabase(){
+        return userDatabase;
+    }
+
+    public void setNameList(ArrayList<String> nameList){
+        this.nameList = nameList;
+    }
+    public void setMeanList(ArrayList<String> meanList){
+        this.meanList = meanList;
+    }
+    public void setSpellingListList(ArrayList<String> spellingList){
+        this.spellingList = spellingList;
+    }
+
+    public ArrayList<String> getNameList(){
+        return nameList;
+    }
+    public ArrayList<String> getMeanList(){
+        return meanList;
+    }
+    public ArrayList<String> getSpellingList(){
+        return spellingList;
+    }
+
 
 }

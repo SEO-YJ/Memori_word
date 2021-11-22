@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingTop="100dp"
+    android:padding="50dp">
+
+    <TextView
+        android:layout_marginTop="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="암기장"
+        android:textColor="@color/black"
+        android:textSize="50dp"
+        android:textStyle="bold"
+        android:layout_marginBottom="20dp"
+        >
+    </TextView>
+    <TextView
+        android:layout_marginTop="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="LOGIN"
+        android:textColor="#808080"
+        android:textSize="20dp"
+        android:textStyle="bold"
+        android:layout_marginBottom="10dp"
+        >
+    </TextView>
+    <ImageView
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:background="@null"
+        android:src="@drawable/login_icon"
+        android:scaleType="fitXY"
+        android:layout_gravity="center"
+        ></ImageView>
+
+
+    <!--
+    구글로 로그인하는 버튼
+    -->
+    <Button
+        android:layout_marginTop="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:text="Log in with Google"
+        android:textColor="@color/white"
+        android:drawableLeft="@drawable/google"
+        android:background="@drawable/bin_blue"
+        android:id="@+id/Button_glogin"
+        >
+    </Button>
+    <!--
+        익명 로그인 버튼
+    -->
+    <Button
+        android:layout_marginTop="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:text="Log in"
+        android:textColor="@color/white"
+        android:drawableLeft="@drawable/anonymous"
+        android:background="@drawable/bin_gray"
+
+        >
+    </Button>
+    <!--
+        익명 계정 생성 버튼
+    -->
+    <Button
+        android:layout_marginTop="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:text="sign up"
+        android:textColor="@color/white"
+        android:drawableLeft="@drawable/anonymous"
+        android:background="@drawable/bin_gray"
+
+        >
+    </Button>
+
+
+
+
+
+</LinearLayout>

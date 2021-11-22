@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+
+    android:orientation="vertical"
+    android:gravity="center_horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".QuizPage">
+    <!--
+    LinearLayout 사용
+    android:orientation="vertical"
+    뷰그룹 하위 뷰들 수직으로 배치
+
+    android:gravity="center_horizontal"
+    뷰그룹 하위 뷰들이 wrap_content 일 경우
+    모두 가운데 정렬 가능
+
+    tools:context=".QuizPage": QuizPage java 소스와 관련되어 있다.
+    레이아웃 파일이 알아서 적혀져 있는 Activity와 매칭을 해준다.
+    tools 속성은 runtime시 제거된다.
+   -->
+
+    <!--
+    id: 소스에서 객체를 참조하기 위한 키
+    "@+id/progressBar": progressBar라는 id 리소스를 추가
+
+    style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+    : 가로 형태의 프로그레스바 지정
+
+    android:max="100"
+    : 프로그레스바 최댓값 지정
+    -->
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="50dp"
+
+        android:max="100"
+        />
+
+
+    <!-- 리소스 내부에서 리소스 접근
+            @: 리소스
+            drawble: 리소스 타입
+            /o: 리소스 이름     -->
+    <ImageView
+        android:id="@+id/imageView1"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_marginBottom="50dp"
+
+        android:src="@drawable/o"
+        android:visibility="gone"
+        />
+
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_marginBottom="50dp"
+
+        android:src="@drawable/x"
+        android:visibility="gone"
+        />
+
+
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="50dp"
+
+        android:textSize="50sp"
+        />
+
+
+    <!--
+    TextView의 자식 위젯
+
+    <requestFocus/>
+    EditText 자동으로 focusing 되게 설정
+   -->
+    <EditText
+        android:id="@+id/editText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:inputType="text">
+
+        <requestFocus/>
+    </EditText>
+
+    <!--
+    android:text=""와 setText(String)가 대응관계에 있다.
+    -->
+    <Button
+        android:id="@+id/button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="전송"
+        />
+
+
+
+</LinearLayout>
