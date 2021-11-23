@@ -84,6 +84,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             Log.d("user", "userID");
             DBHelper = new ReadAndWrite(userID, nameList, meanList, spellingList);
 
+
             Log.d("onStart", "..." + ++check);
             //DBHelper = new ReadAndWrite(userID, nameList, meanList, spellingList);
             DBHelper.getFirstListListener();
@@ -98,11 +99,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             ArrayAdapter arrayAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, nameList);
             listView.setAdapter(arrayAdapter);
+
+
+
         }
 
 
     }
 
+
+    // 넘어가는데 있어 파이어 베이스에서 데이터를 가져오는 시간이 걸리는 것 같다.
+    // Thread.sleep()으로 시간을 강제로 지연시키면 전달이 잘 되는 것으로 보아
+    // 파이어 베이스에 데이터가 많을 경우 더 많은 시간이 지연 될 수 있을 것으로 보인다.
     @Override
     public void onClick(View view) {
         String mean = meanView.getText().toString();
@@ -115,21 +123,42 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
         else if(view == loadBtn){
             //DBHelper.writeNewList("new!");
-            DBHelper.writeNewWord("new!", mean, spelling);
+            //DBHelper.writeNewWord("new!", mean, spelling);
             //DBHelper.updateWord(listName, mean, spelling);
         }
         else if(view == deleteBtn){
             if(!mean.equals("") && !spelling.equals("")){
-                DBHelper.deleteWord(listName, mean, spelling);
+                DBHelper.deleteWord(listName, spelling);
             }
         }
         else if(view == quizBtn){
-            Intent intent = new Intent(this, ListPage.class);
-            intent.putExtra("nameList", this.nameList);
-            intent.putExtra("meanList", this.meanList);
-            intent.putExtra("spellingList", this.spellingList);
-            intent.putExtra("UID", this.userID);
-            startActivity(intent);
+            // 스레드 생성할 때 이렇게...
+            Thread meanThread = new Thread("mean Thread"){
+                public void run(){
+                    DBHelper.getFirstListListener(nameList.get(0));
+                    DBHelper.addWordEventListener(DBHelper.userDatabase.child(nameList.get(0)));
+                    Log.d("mean list", "" + meanList.size());
+
+                    try {
+                        Thread.sleep(100);
+
+                       // Intent intent = new Intent(MainActivity.this, ListPage.class);
+                        Intent intent = new Intent(MainActivity.this, QuizPage.class);
+                        intent.putExtra("nameList", nameList);
+                        intent.putExtra("meanList", meanList);
+                        intent.putExtra("spellingList", spellingList);
+                        intent.putExtra("UID", userID);
+
+                        startActivity(intent);
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+
+                }
+            };
+            meanThread.start();
 
         }
 

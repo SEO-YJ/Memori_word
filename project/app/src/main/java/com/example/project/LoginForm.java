@@ -82,6 +82,7 @@ public class LoginForm extends AppCompatActivity implements View.OnClickListener
         if(getUser() != null){
             Log.d("LoginForm의 ", "user " + getUser().getUid());
             //finish();
+            //startActivity(new Intent(this, MainActivity.class));
         }
     }
 

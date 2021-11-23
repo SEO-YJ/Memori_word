@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -16,12 +17,15 @@ import java.util.ArrayList;
 
 public class ListPage extends AppCompatActivity implements View.OnClickListener {
 
+    Handler mHandler = new Handler();
+
     ListView listView;
     ReadAndWrite DBHelper;
 
     ArrayList<String> nameList;
     ArrayList<String> meanList;
     ArrayList<String> spellingList;
+    String userID;
 
     ArrayAdapter arrayAdapter;
 
@@ -35,13 +39,15 @@ public class ListPage extends AppCompatActivity implements View.OnClickListener 
         nameList =  (ArrayList<String>) getIntent().getSerializableExtra("nameList");
         meanList =  (ArrayList<String>) getIntent().getSerializableExtra("meanList");
         spellingList =  (ArrayList<String>) getIntent().getSerializableExtra("spellingList");
-        String userID = (String)getIntent().getSerializableExtra("UID");
-        DBHelper = new ReadAndWrite(userID, nameList, meanList, spellingList);
+        userID = (String)getIntent().getSerializableExtra("UID");
 
-        DatabaseReference listRef = DBHelper.userDatabase.child(nameList.get(0));
-        DBHelper.getFirstListListener(listRef, meanList, spellingList);
 
-        Log.d("list Ref", listRef.child("tree").getKey());
+        Log.d("mean", meanList.size() + "");
+        //DBHelper = new ReadAndWrite(userID, nameList, meanList, spellingList);
+
+        //DBHelper.getFirstListListener(nameList.get(0));
+
+        Log.d("name list get(0)", nameList.get(0) + "");
         Log.d("userid", userID);
         Log.d("mean", meanList.size() + "");
         arrayAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, nameList);
@@ -72,4 +78,5 @@ public class ListPage extends AppCompatActivity implements View.OnClickListener 
         listView.setAdapter(arrayAdapter);
         //startActivity(new Intent(this, QuizPage.class));
     }
+
 }

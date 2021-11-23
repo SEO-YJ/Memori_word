@@ -57,7 +57,6 @@ public class ReadAndWrite implements Serializable {
 
         Log.d("name list size", "" + nameList.size());
 
-
     }
 
     public void mergeDatabase(ReadAndWrite prev){
@@ -100,7 +99,7 @@ public class ReadAndWrite implements Serializable {
     }
 
     // 기본적으로 spelling을 리스트의 key로 삼아 저장했기에, spelling을 받아 삭제
-    public void deleteWord(String listName, String mean, String spelling){
+    public void deleteWord(String listName, String spelling){
         userDatabase.child(listName).child(spelling).removeValue();
     }
 
@@ -108,7 +107,7 @@ public class ReadAndWrite implements Serializable {
     // 일반적으로 위의 writeNewWord가 수정의 역할도 겸하고 있긴 하다.
     public void updateWord(String listName, String mean, String spelling){
         if(userDatabase.child(listName).child(spelling).getKey().equals(spelling)){
-            deleteWord(listName, mean, spelling);
+            deleteWord(listName, spelling);
         }
         writeNewWord(listName, mean, spelling);
 
@@ -175,13 +174,13 @@ public class ReadAndWrite implements Serializable {
         });
     }
 
-    public void getFirstListListener(DatabaseReference ref, ArrayList<String> meanList, ArrayList<String> spellingList){
-        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+    public void getFirstListListener(String listName){
+        userDatabase.child(listName).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 meanList.clear();
                 spellingList.clear();
-                Log.d("getFirstListListener..", "호출 됨");
+                Log.d("list 이름부분 호출 ", "호출 됨");
                 for(DataSnapshot listSnapshot : snapshot.getChildren()){
                     spellingList.add(listSnapshot.getKey());
                     meanList.add(listSnapshot.getValue().toString());
