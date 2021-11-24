@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/linear_viewGroup"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_marginTop="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="암기장"
+        android:textColor="@color/black"
+        android:textSize="50dp"
+        android:textStyle="bold"
+        android:layout_marginBottom="20dp"
+        ></TextView>
+
+</LinearLayout>

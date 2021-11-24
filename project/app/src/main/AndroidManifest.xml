@@ -12,17 +12,35 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Project">
         <activity
+            android:name=".FirstPage"
+            android:exported="true"
+            android:theme="@style/AppTheme">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".List"
+            android:exported="false"
+            android:theme="@style/AppTheme"/>
+        <activity
             android:name=".ListPage"
-            android:exported="false" />
+            android:exported="false"
+            android:theme="@style/AppTheme"/>
         <activity
             android:name=".ScoringPage"
-            android:exported="false" />
+            android:exported="false"
+            android:theme="@style/AppTheme"/>
         <activity
             android:name=".QuizPage"
-            android:exported="true"></activity>
+            android:exported="true"
+            android:theme="@style/AppTheme"/>
         <activity
             android:name=".SignPart"
-            android:exported="true">
+            android:exported="true"
+            android:theme="@style/AppTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -31,7 +49,8 @@
         </activity>
         <activity
             android:name=".LoginForm"
-            android:exported="true">
+            android:exported="true"
+            android:theme="@style/AppTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -40,7 +59,8 @@
         </activity>
         <activity
             android:name=".MainActivity"
-            android:exported="true"></activity>
+            android:exported="true"
+            android:theme="@style/AppTheme"/>
     </application>
 
 </manifest>

@@ -85,15 +85,29 @@ public class ReadAndWrite implements Serializable {
     // spelling을 키로 삼아 단어 쌍을 리스트에 저장한다.
     // 동일한 spelling이 올 경우 기존의 spelling의 단어를 업데이트 하는 효과가 있다.
     public void writeNewWord(String listName, String mean, String spelling){
-        userDatabase.child(listName).child(spelling).setValue(mean);
-        addWordEventListener(userDatabase.child(listName));
+        Thread wordThread = new Thread("wordThread"){
+            @Override
+            public void run() {
+                super.run();
+
+                try {
+                    Thread.sleep(10);
+                    userDatabase.child(listName).child(spelling).setValue(mean);
+                    addWordEventListener(userDatabase.child(listName));
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+        wordThread.start();
+
     }
     // 리스트를 선택해 해당 리스트를 가리키는 DB참조를 받는 listDatabase를 설정할 때 사용
 //    public void listSelcet(String listName){
 //        listDatabase = userDatabase.child(listName);
 //        addWordEventListener(listDatabase);
 //    }
-    // 리스트를 생성하는 함수... 리스트만 생성한다.
+    // 리스트를 생성하는 함수... 리스트만 생성한다. 주의! 기존에 있던 리스트 이름이라면 리스트 내부가 삭제된다..
     public void writeNewList(String listName){
         userDatabase.child(listName).setValue("");
     }

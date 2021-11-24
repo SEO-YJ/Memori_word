@@ -82,7 +82,7 @@ public class LoginForm extends AppCompatActivity implements View.OnClickListener
         if(getUser() != null){
             Log.d("LoginForm의 ", "user " + getUser().getUid());
             //finish();
-            //startActivity(new Intent(this, MainActivity.class));
+            startActivity(new Intent(this, MainActivity.class));
         }
     }
 
@@ -245,7 +245,20 @@ public class LoginForm extends AppCompatActivity implements View.OnClickListener
     @Override
     public void onClick(View view) {
         if(view == googleSignBtn){
-            signIn();
+            Thread signThread = new Thread("signThread"){
+                @Override
+                public void run() {
+                    super.run();
+
+                    try {
+                        Thread.sleep(10);
+                        signIn();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            };
+            signThread.start();
         }
         else if(view == annonymousBtn){
             signInAnonymously();

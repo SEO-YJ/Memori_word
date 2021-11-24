@@ -33,6 +33,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     Button quizBtn;
 
+    EditText listname;
     EditText meanView;
     EditText spellingView;
     Button saveBtn;
@@ -49,6 +50,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        listname= findViewById(R.id.listname);
         meanView = findViewById(R.id.mean_view);
         spellingView = findViewById(R.id.spelling_view);
         saveBtn = findViewById(R.id.save_btn);
@@ -89,18 +91,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             //DBHelper = new ReadAndWrite(userID, nameList, meanList, spellingList);
             DBHelper.getFirstListListener();
 
-//            if(nameList.size() != 0)
-//            {
-//                listName = nameList.get(0);
-//                Log.d("list name : ", listName);
-//            }
-//            else
-//                listName = "list name";
-
             ArrayAdapter arrayAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, nameList);
             listView.setAdapter(arrayAdapter);
-
-
 
         }
 
@@ -113,11 +105,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     // 파이어 베이스에 데이터가 많을 경우 더 많은 시간이 지연 될 수 있을 것으로 보인다.
     @Override
     public void onClick(View view) {
+        String listName = listname.getText().toString();
         String mean = meanView.getText().toString();
         String spelling = spellingView.getText().toString();
 
         if(view == saveBtn){
             if(!mean.equals("") && !spelling.equals("")){
+                listName = "list name";
                 DBHelper.writeNewWord(listName, mean, spelling);
             }
         }
@@ -135,15 +129,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             // 스레드 생성할 때 이렇게...
             Thread meanThread = new Thread("mean Thread"){
                 public void run(){
-                    DBHelper.getFirstListListener(nameList.get(0));
-                    DBHelper.addWordEventListener(DBHelper.userDatabase.child(nameList.get(0)));
+                    //DBHelper.getFirstListListener(nameList.get(0));
+                    //DBHelper.addWordEventListener(DBHelper.userDatabase.child(nameList.get(0)));
                     Log.d("mean list", "" + meanList.size());
 
                     try {
                         Thread.sleep(100);
-
-                       // Intent intent = new Intent(MainActivity.this, ListPage.class);
-                        Intent intent = new Intent(MainActivity.this, QuizPage.class);
+                        Intent intent = new Intent(MainActivity.this, List.class);
+                        //Intent intent = new Intent(MainActivity.this, ListPage.class);
+                        //Intent intent = new Intent(MainActivity.this, QuizPage.class);
                         intent.putExtra("nameList", nameList);
                         intent.putExtra("meanList", meanList);
                         intent.putExtra("spellingList", spellingList);

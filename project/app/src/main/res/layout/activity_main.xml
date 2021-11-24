@@ -15,6 +15,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="sign page" />
+    <EditText
+        android:id="@+id/listname"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="리스트를 입력해주세요" />
 
     <EditText
         android:id="@+id/mean_view"
