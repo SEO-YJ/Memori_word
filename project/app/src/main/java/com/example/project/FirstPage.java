@@ -34,7 +34,7 @@ public class FirstPage extends AppCompatActivity{
                     startActivity(new Intent(FirstPage.this, MainActivity.class));
                 }
                 else{
-                    Log.d("user", null);
+                    Log.d("user", null + "");
                     startActivity(new Intent(FirstPage.this, LoginForm.class));
                 }
             }

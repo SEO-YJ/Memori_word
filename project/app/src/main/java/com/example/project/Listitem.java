@@ -5,7 +5,7 @@ public class Listitem {
     private String listsize;
 
     //생성자
-    Listitem(String listname,String listsize){
+    Listitem(String listname, String listsize){
         this.listname = listname;
         this.listsize = listsize;
     }

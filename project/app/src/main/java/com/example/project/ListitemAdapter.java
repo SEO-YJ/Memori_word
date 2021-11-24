@@ -1,5 +1,7 @@
 package com.example.project;
 import android.content.Context;
+import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,11 +14,16 @@ import java.util.ArrayList;
 
 public class ListitemAdapter extends ArrayAdapter<Listitem> {
     String userID;
+    ArrayList<String> nameList;
+    ArrayList<String> meanList;
+    ArrayList<String> spellingList;
+
     Context context;
     int resID;
     ArrayList<Listitem> items;
 
-    public ListitemAdapter(Context context, int resID, ArrayList<Listitem> items, String userID){
+    public ListitemAdapter(Context context, int resID, ArrayList<Listitem> items, String userID,
+    ArrayList<String> nameList, ArrayList<String> meanList, ArrayList<String> spellingList){
         super(context, resID);
         this.context = context;
         this.resID = resID;
@@ -24,12 +31,12 @@ public class ListitemAdapter extends ArrayAdapter<Listitem> {
         this.userID = userID;
     }
 
-//    //ArrayList크기 리턴, 리스트뷰에 생성될 아이템 수
-//    @Override
-//    public int getCount() {
-//        return items.size();
-//    }
-//
+    //ArrayList크기 리턴, 리스트뷰에 생성될 아이템 수
+    @Override
+    public int getCount() {
+        return items.size();
+    }
+
 //    //해당 position의 아이템을 리턴, 아이템 클릭시 아이템이 몇번째인지
 ////    @Override
 ////    public Object getItem(int position) {
@@ -60,28 +67,16 @@ public class ListitemAdapter extends ArrayAdapter<Listitem> {
         ListHolder holder = (ListHolder) convertView.getTag();
 
         TextView listNameText = holder.listNameText;
+        Log.d(holder.listNameText.getText() + "", "-----");
         TextView listSizeText = holder.listSizeText;
-        Button showListBtn = holder.showListBtn;
-        Button quizPageBtn = holder.quizPageBtn;
+        //Button showListBtn = holder.showListBtn;
+        //Button quizPageBtn = holder.quizPageBtn;
 
         Listitem item = items.get(position);
 
         listNameText.setText(item.getListname());
         listSizeText.setText(item.getListsize());
 
-       //quizPageBtn.setOnClickListener();
-
-        showListBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                ListHolder holder = (ListHolder) view.getTag();
-                String listName = holder.listNameText.getText().toString();
-                ReadAndWrite DBHelper = new ReadAndWrite(userID, new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
-
-
-
-            }
-        });
 
         return convertView;
     }
