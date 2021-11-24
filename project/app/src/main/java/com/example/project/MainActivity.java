@@ -110,8 +110,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         String spelling = spellingView.getText().toString();
 
         if(view == saveBtn){
-            if(!mean.equals("") && !spelling.equals("")){
-                listName = "list name";
+            if(!listName.equals("") && !mean.equals("") && !spelling.equals("")){
                 DBHelper.writeNewWord(listName, mean, spelling);
             }
         }
@@ -121,7 +120,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             //DBHelper.updateWord(listName, mean, spelling);
         }
         else if(view == deleteBtn){
-            if(!mean.equals("") && !spelling.equals("")){
+            if(!listName.equals("") && !mean.equals("") && !spelling.equals("")){
                 DBHelper.deleteWord(listName, spelling);
             }
         }
@@ -131,13 +130,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 public void run(){
                     //DBHelper.getFirstListListener(nameList.get(0));
                     //DBHelper.addWordEventListener(DBHelper.userDatabase.child(nameList.get(0)));
-                    Log.d("mean list", "" + meanList.size());
+                    Log.d("mean list", "" + spellingList.size());
 
                     try {
                         Thread.sleep(100);
                         Intent intent = new Intent(MainActivity.this, List.class);
-                        //Intent intent = new Intent(MainActivity.this, ListPage.class);
-                        //Intent intent = new Intent(MainActivity.this, QuizPage.class);
                         intent.putExtra("nameList", nameList);
                         intent.putExtra("meanList", meanList);
                         intent.putExtra("spellingList", spellingList);

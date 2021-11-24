@@ -18,7 +18,7 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
-public class List extends AppCompatActivity implements AdapterView.OnItemClickListener {
+public class List extends AppCompatActivity{
     ListView listView;
 
     TextView showText;
@@ -45,6 +45,7 @@ public class List extends AppCompatActivity implements AdapterView.OnItemClickLi
 
         DBHelper = new ReadAndWrite(userID, nameList, meanList, spellingList);
 
+
         listView = findViewById(R.id.listview);
 
         ArrayList<Listitem> items = new ArrayList<>();
@@ -67,51 +68,6 @@ public class List extends AppCompatActivity implements AdapterView.OnItemClickLi
         super.onStart();
 
     }
-
-    @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Log.d(position+"", position+"");
-
-        if(view == showText){
-            Thread holderThread = new Thread("holderThread"){
-                @Override
-                public void run() {
-                    super.run();
-
-                    try {
-                        ListHolder holder = (ListHolder) view.getTag();
-                        String listName = holder.listNameText.getText().toString();
-                        DBHelper.addWordEventListener(DBHelper.userDatabase.child(listName));
-                        DBHelper.getFirstListListener(listName);
-
-                        Thread.sleep(100);
-
-                        Intent intent = new Intent(List.this, MeanAndSpellingPage.class);
-                        intent.putExtra("list name", listName);
-                        intent.putExtra("meanList", meanList);
-                        intent.putExtra("spelling", spellingList);
-                        intent.putExtra("UID", userID);
-
-                        startActivity(intent);
-
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
-            };
-            holderThread.start();
-        }
-    }
-
-
-
-    /*@Override
-    public void onClick(View v) {
-        Log.d("mean", meanList.size() + "");
-        arrayAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, meanList);
-        listView.setAdapter(arrayAdapter);
-        startActivity(new Intent(this, QuizPage.class));
-    }*/
 
 
 }

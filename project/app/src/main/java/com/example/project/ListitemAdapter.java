@@ -27,7 +27,7 @@ public class ListitemAdapter extends ArrayAdapter<Listitem>{
     ArrayList<Listitem> items;
 
     public ListitemAdapter(Context context, int resID, ArrayList<Listitem> items, String userID,
-    ArrayList<String> nameList, ArrayList<String> meanList, ArrayList<String> spellingList){
+                           ArrayList<String> nameList, ArrayList<String> meanList, ArrayList<String> spellingList){
         super(context, resID);
         this.context = context;
         this.resID = resID;
@@ -107,7 +107,7 @@ public class ListitemAdapter extends ArrayAdapter<Listitem>{
                             Intent intent = new Intent(context, QuizPage.class);
                             intent.putExtra("list name", listName);
                             intent.putExtra("meanList", meanList);
-                            intent.putExtra("spelling", spellingList);
+                            intent.putExtra("spellingList", spellingList);
                             intent.putExtra("UID", userID);
 
                             context.startActivity(intent);
@@ -142,7 +142,7 @@ public class ListitemAdapter extends ArrayAdapter<Listitem>{
                             Intent intent = new Intent(context, MeanAndSpellingPage.class);
                             intent.putExtra("list name", listName);
                             intent.putExtra("meanList", meanList);
-                            intent.putExtra("spelling", spellingList);
+                            intent.putExtra("spellingList", spellingList);
                             intent.putExtra("UID", userID);
 
                             context.startActivity(intent);

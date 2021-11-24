@@ -35,17 +35,17 @@ public class MeanAndSpellingPage extends AppCompatActivity {
         userID = (String)getIntent().getSerializableExtra("UID");
 
 
+
         ArrayList<Listitem> items = new ArrayList<>();
-        for(int i =0; i < meanList.size(); i++){
-            Log.d(meanList.get(i),meanList.get(i));
-            items.add(new Listitem(meanList.get(i), meanList.get(i)));
+        for(int i =0; i < spellingList.size(); i++){
+            items.add(new Listitem(spellingList.get(i), meanList.get(i)));
         }
 
-        ArrayAdapter arrayAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, meanList);
-        listView.setAdapter(arrayAdapter);
-        //ListitemAdapter ListAdapter = new ListitemAdapter(this, R.layout.item_listview, items,
-                //userID, new ArrayList<>(), meanList, spellingList);
+//        ArrayAdapter arrayAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, meanList);
+//        listView.setAdapter(arrayAdapter);
 
+        WordsAdapter wordsAdapter = new WordsAdapter(this, R.layout.word_listview, items, userID, listName, meanList, spellingList);
+        listView.setAdapter(wordsAdapter);
         //listView.setAdapter(ListAdapter);
 
     }

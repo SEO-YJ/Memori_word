@@ -154,6 +154,7 @@ public class ReadAndWrite implements Serializable {
                         spellingList.add(listSnapshot.getKey());
                         meanList.add(listSnapshot.getValue().toString());
                         Log.d("mean", listSnapshot.getValue().toString());
+                        Log.d("spelling", listSnapshot.getKey());
                     }
                 }
             }
@@ -194,11 +195,10 @@ public class ReadAndWrite implements Serializable {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 meanList.clear();
                 spellingList.clear();
-                Log.d("list 이름부분 호출 ", "호출 됨");
                 for(DataSnapshot listSnapshot : snapshot.getChildren()){
                     spellingList.add(listSnapshot.getKey());
                     meanList.add(listSnapshot.getValue().toString());
-                    Log.d("mean", listSnapshot.getValue().toString());
+                    Log.d("spelling", listSnapshot.getKey());
                 }
 
             }
